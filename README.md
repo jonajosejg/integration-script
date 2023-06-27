@@ -1,10 +1,8 @@
 # Drivechain / testchain integration script
 
 *integration-script* is a bash script that is used as a testing suite for both
-the bip300, bip301 testchain implementation in node.js, and the drivechain mainchain
-repository.
-
-[drivechain.info][drivechain]
+the bip300, bip301 testchain template implementation in node.js, and the
+drivechain [mainchain repository]: https://github.com/layertwo-labs/mainchain
 
 ## Install
 
