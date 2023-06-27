@@ -104,8 +104,8 @@ function startDrivechain {
 
 function testchain {
     ./sidechain/bin/sidechain -n regtest \
-    ./sidechain/bin/sidechain-cli -n regtest acceptbmmheader  \
-    ./sidechain/bin/sidechain-cli -n regtest acceptbmmblock \
+    ./sidechain/bin/sidechain-cli -n regtest rpc acceptbmmheader  \
+    ./sidechain/bin/sidechain-cli -n regtest rpc acceptbmmblock \
 
     sleep 10s
 }
