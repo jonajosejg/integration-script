@@ -172,6 +172,50 @@ function restartdrivechain {
     sleep 3s
 }
 
+function bmm {
+    sleep 0.5s
+
+    OLD_TESTCHAIN=0
+    NEW_TESTCHAIN=0
+
+    # Call refreshbmm RPC on any sidechains we want to BMM
+    # Make new bmm request if required and connect new bmm blocks if found
+    for arg in "$@"
+    do
+        if [ "$arg" == "testchain" ]; then
+            OLD_TESTCHAIN=`./sidechain/bin/sidechain-cli -n regtest rpc getblockcount`
+            ./sidechain/bin/sidechain-cli -n regtest rpc refreshbmm $BMM_BID
+        sleep 1s
+    fi
+    done
+
+    # Up to 3 tries to BMM a block for every sidechain requested
+    for ((y = 0; y < 3; y++)); do
+        # Mine a mainchain block to include BMM requests
+        sleep 1s
+        minemainchain 1
+        sleep 1s
+
+        # Refresh BMM again for selected sidechains and check if block connected
+        for arg in "$@"
+        do
+            if [ "$arg" == "testchain" ]; then
+                ./sidechain/bin/sidechain-cli -n regtest rpc refreshbmm $BMM_BID false
+                NEW_TESTCHAIN=`./sidechain/bin/sidechain-cli -n regtest rpc getblockcount`
+              fi
+        done
+
+        # Check completion
+        if [ "$OLD_TESTCHAIN" -ne "$NEW_TESTCHAIN" ]
+
+        then
+            break
+        fi
+
+    done
+}
+
+
 function replacetip {
     if [ $SKIP_REPLACE_TIP -eq 1 ]; then
         return 0
@@ -223,46 +267,8 @@ function minemainchain {
     done
 }
 
-function bmm {
-    sleep 0.5s
 
-    OLD_TESTCHAIN=0
-    NEW_TESTCHAIN=0
 
-    # Call refreshbmm RPC on any sidechains we want to BMM
-    # Make new bmm request if required and connect new bmm blocks if found
-    for arg in "$@"
-    do
-        if [ "$arg" == "testchain" ]; then
-            OLD_TESTCHAIN=`./sidechain/bin/sidechain-cli -n regtest rpc getblockcount`
-            ./sidechain/bin/sidechain-cli refreshbmm $BMM_BID
-        sleep 1s
-    fi
-    done
-
-    # Up to 3 tries to BMM a block for every sidechain requested
-    for ((y = 0; y < 3; y++)); do
-        # Mine a mainchain block to include BMM requests
-        sleep 1s
-        minemainchain 1
-        sleep 1s
-
-        # Refresh BMM again for selected sidechains and check if block connected
-        for arg in "$@"
-        do
-            if [ "$arg" == "testchain" ]; then
-                ./sidechain/bin/sidechain-cli -n regtest rpc refreshbmm $BMM_BID false
-                NEW_TESTCHAIN=`./sidechain/bin/sidechain-cli -n regtest rpc getblockcount`
-
-            fi
-
-        # Check completion
-        if [ "$OLD_TESTCHAIN" -ne "$NEW_TESTCHAIN" ]
-            break
-        fi
-
-    done
-}
 
 function buildchain {
     git pull
