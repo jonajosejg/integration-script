@@ -315,7 +315,7 @@ if [ $SKIP_CLONE -ne 1 ]; then
     echo
     echo "Cloning repositories"
     git clone https://github.com/LayerTwo-labs/mainchain
-    git clone https://github.com/rojii/sidechain
+    git clone https://github.com/educationofjon/sidechain
 fi
 
 
