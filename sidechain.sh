@@ -102,7 +102,7 @@ function startDrivechain {
     sleep 10s
 }
 
-function testchain {
+function startTestchain {
     ./sidechain/bin/sidechain -n regtest \
     ./sidechain/bin/sidechain-cli -n regtest rpc acceptbmmheader  \
     ./sidechain/bin/sidechain-cli -n regtest rpc acceptbmmblock \
@@ -349,7 +349,7 @@ echo "server=1" >> ~/.drivechain/drivechain.conf
 echo
 echo "Creating testchain configuration file"
 mkdir ~/.sidechain/
-cp sidechain/etc/sample.conf ~/.sidechain/sidechain.conf
+cp ~/sidechain/etc/sample.conf ~/.sidechain/sidechain.conf
 
 #
 # Get mainchain running and mine first 100 mainchain blocks
